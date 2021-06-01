@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Hello World! </title>
+</head>
+
+<body>
+<ul>    
+    {{range .}}
+    <li>There are  <span style="color:red"> {{.Count}} {{.Material}} sweaters </span> in the bag</li>
+    {{end}}
+</ul>
+</body>
+</html>

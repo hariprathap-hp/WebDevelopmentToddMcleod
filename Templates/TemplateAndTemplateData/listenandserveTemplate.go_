@@ -1,0 +1,30 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"text/template"
+)
+
+var tpl *template.Template
+var err error
+
+func main() {
+	tpl, err = template.ParseFiles("tpl.gohtml")
+	fmt.Printf("%T\n", tpl)
+
+	if err != nil {
+		fmt.Println("Error is", err)
+	}
+
+	http.HandleFunc("/template", templateHandler)
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+
+func templateHandler(w http.ResponseWriter, r *http.Request) {
+	e_err := tpl.Execute(w, nil)
+	if e_err != nil {
+		fmt.Println(e_err)
+	}
+}

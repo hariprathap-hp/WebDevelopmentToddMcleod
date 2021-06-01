@@ -1,0 +1,26 @@
+package main
+
+import (
+	"html/template"
+	"os"
+)
+
+//ccreate a struct whose data will be populated in the template
+type Inventory struct {
+	Material string
+	Count    int
+}
+
+func main() {
+	sweaters := Inventory{"wool", 17}
+	//The purpose is to create a very basic template
+	tmpl, err := template.New("Inventory").Parse("{{.Count -}} items are made up of {{- .Material}}")
+	if err != nil {
+		panic(err)
+	}
+
+	err = tmpl.Execute(os.Stdout, sweaters)
+	if err != nil {
+		panic(err)
+	}
+}
