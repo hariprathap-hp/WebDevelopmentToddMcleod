@@ -8,12 +8,12 @@
 
 <body>
 <ul>    
-    {{range .Wisdom}}
-    {{uc .Motto}}
+    {{range .Sages}}
+    <ul> <p style=color:red > {{uc .Motto}} </p></ul>
     {{end}}
 
-    {{range .Gaadi}}
-    {{ft .Brand}}
+    {{range .Cars}}
+    <ul> <p style=color:green > {{lt .Brand}} </p> </ul>
     {{end}}
 </ul>
 </body>
