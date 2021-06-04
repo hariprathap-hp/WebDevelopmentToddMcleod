@@ -1,0 +1,21 @@
+<! DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <h1> <b Learning the Indexing> </b> <h1>
+</head>
+
+<body>
+    GETTING THE MONTH NAME AND NUMBER OF DAYS IN IT 
+    {{.Yr}}
+    {{.Current}}
+
+    {{range .Current}}
+        {{if gt .NumDays 30}}
+            {{.Name}} {{.NumDays}}
+        {{end}}
+    {{end}}
+
+</body>
+</html>
