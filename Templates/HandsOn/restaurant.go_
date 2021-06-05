@@ -1,0 +1,90 @@
+package main
+
+import (
+	"fmt"
+	"os"
+	"text/template"
+)
+
+type Foods struct {
+	food     string
+	quantity int
+	price    float64
+}
+
+type Menu struct {
+	food []Foods
+}
+
+type restaurant struct {
+	Breakfast, Lunch, Dinner Menu
+}
+
+func main() {
+	tmpl, err := template.ParseFiles("restaurant.gohtml")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	myMenu := restaurant{
+		Breakfast: Menu{
+			food: []Foods{
+				{
+					food:     "Dosai",
+					quantity: 1,
+					price:    51.50,
+				},
+				{
+					food:     "Idli",
+					quantity: 1,
+					price:    48,
+				},
+				{
+					food:     "Chapathi",
+					quantity: 2,
+					price:    48,
+				},
+			},
+		},
+		Lunch: Menu{
+			food: []Foods{
+				{
+					food:     "Tamilnadu Meals",
+					quantity: 1,
+					price:    200,
+				},
+				{
+					food:     "Business Meals",
+					quantity: 1,
+					price:    150,
+				},
+				{
+					food:     "Mini Meals",
+					quantity: 1,
+					price:    120,
+				},
+			},
+		},
+		Dinner: Menu{
+			food: []Foods{
+				{
+					food:     "Idlies",
+					quantity: 1,
+					price:    50,
+				},
+				{
+					food:     "Parotas",
+					quantity: 2,
+					price:    50,
+				},
+				{
+					food:     "Dosai",
+					quantity: 1,
+					price:    60,
+				},
+			},
+		},
+	}
+
+	tmpl.Execute(os.Stdout, myMenu)
+}

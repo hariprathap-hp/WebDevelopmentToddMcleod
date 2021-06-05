@@ -1,0 +1,70 @@
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"os"
+)
+
+type hotel struct {
+	Name    string
+	Address string
+	City    string
+	Zip     int
+}
+
+type region struct {
+	Region string
+	Hotels []hotel
+}
+
+type Regions []region
+
+func main() {
+	tmpl, err := template.ParseFiles("californiaHotels.gohtml")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	h := Regions{
+		region{
+			Region: "Southern",
+			Hotels: []hotel{
+				hotel{
+					Name:    "Hotel California",
+					Address: "42 Sunset Boulevard",
+					City:    "Los Angeles",
+					Zip:     95612,
+				},
+				hotel{
+					Name:    "H",
+					Address: "4",
+					City:    "L",
+					Zip:     95613,
+				},
+			},
+		},
+		region{
+			Region: "Central",
+			Hotels: []hotel{
+				hotel{
+					Name:    "Hotel Central California",
+					Address: "42 Central Sunset Boulevard",
+					City:    "Los Angeles Central",
+					Zip:     95712,
+				},
+				hotel{
+					Name:    "C",
+					Address: "4C",
+					City:    "LC",
+					Zip:     95713,
+				},
+			},
+		},
+	}
+
+	t_err := tmpl.Execute(os.Stdout, h)
+	if t_err != nil {
+		fmt.Println(t_err)
+	}
+}
