@@ -1,0 +1,30 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net"
+)
+
+func main() {
+	//create a listener
+	lis, lis_err := net.Listen("tcp", ":8080")
+	if lis_err != nil {
+		log.Fatalln(lis_err)
+	}
+
+	defer lis.Close()
+
+	for {
+		conn, conn_err := lis.Accept()
+		if conn_err != nil {
+			log.Panicln(conn_err)
+		}
+
+		fmt.Fprintln(conn, "My name is Billa")
+		io.WriteString(conn, "Bond, James Bond\n")
+		conn.Close()
+	}
+
+}

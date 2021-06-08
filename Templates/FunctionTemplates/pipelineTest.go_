@@ -1,0 +1,41 @@
+package main
+
+import (
+	"fmt"
+	"math"
+	"os"
+	"text/template"
+)
+
+//create a funcmap to pass it to template
+
+var ft = template.FuncMap{
+	"sqrt": SquareRoot,
+	"sum":  FindSum,
+}
+
+func SquareRoot(n float64) float64 {
+	return math.Sqrt(n)
+}
+
+func FindSum(i []int) float64 {
+	s := 0
+	for _, v := range i {
+		s += v
+	}
+	return float64(s)
+}
+
+var tmpl *template.Template
+
+func init() {
+	tmpl = template.Must(template.New("").Funcs(ft).ParseFiles("pipelinesTest.gohtml"))
+}
+
+func main() {
+	input := []int{169}
+	err := tmpl.ExecuteTemplate(os.Stdout, "pipelinesTest.gohtml", input)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
