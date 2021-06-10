@@ -4,6 +4,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 )
@@ -11,11 +12,13 @@ import (
 //var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
 
 var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data.json"
+var tmpl *template.Template
+var parse_err error
 
 type Options struct {
 	Records struct {
-		Expirydates []string `json:"expiryDates"`
-		Data        []struct {
+		//Expirydates []string `json:"expiryDates"`
+		Data []struct {
 			Strikeprice int    `json:"strikePrice"`
 			Expirydate  string `json:"expiryDate"`
 			Pe          struct {
@@ -57,9 +60,9 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Inside Fetch URL")
 	client := http.DefaultClient
 	//client := &http.Client{Transport: roundTripperStripUserAgent{}}
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		panic(err)
+	req, req_err := http.NewRequest(http.MethodGet, url, nil)
+	if req_err != nil {
+		panic(req_err)
 	}
 
 	//either use this method by changing user-agent to an empty string "" or use the rountTripperStripUserAgent above
@@ -75,13 +78,16 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(rd_err)
 	}
 
-	//fmt.Println(string(result))
-
 	var option Options
 
 	json.Unmarshal([]byte(result), &option)
-	fmt.Fprintf(w, "%v\n", option)
-	//fmt.Println(string(option))
+
+	tmpl, parse_err = template.ParseFiles("niftyBank.gohtml")
+
+	if parse_err != nil {
+		fmt.Printf("Error while parsing html template file %s", parse_err)	
+	}
+	tmpl.Execute(w, option)
 }
 
 func main() {
@@ -92,11 +98,5 @@ func main() {
 	if list_err != nil {
 		fmt.Println(list_err)
 	}
-
-	//fmt.Printf("%T\n", option.Records.Data)
-
-	/*for _, v := range option.Records.Data {
-		fmt.Printf("%T\n", v)
-	}*/
 
 }
