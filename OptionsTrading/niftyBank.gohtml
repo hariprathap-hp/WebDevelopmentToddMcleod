@@ -8,7 +8,9 @@
 
 <body>
     {{ range .Records.Data}}
-        <br>{{.}}</br>        
+        {{if eq .Expirydate "17-Jun-2021"}}
+            {{.Pe}}
+        {{end}}
     {{end}}
 </body>
 

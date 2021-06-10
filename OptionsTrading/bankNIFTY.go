@@ -11,7 +11,7 @@ import (
 
 //var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
 
-var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data.json"
+var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data1.json"
 var tmpl *template.Template
 var parse_err error
 
@@ -85,7 +85,7 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 	tmpl, parse_err = template.ParseFiles("niftyBank.gohtml")
 
 	if parse_err != nil {
-		fmt.Printf("Error while parsing html template file %s", parse_err)	
+		fmt.Printf("Error while parsing html template file %s", parse_err)
 	}
 	tmpl.Execute(w, option)
 }
