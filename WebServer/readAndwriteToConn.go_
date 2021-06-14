@@ -1,0 +1,46 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"time"
+)
+
+func main() {
+	//create a listener for connections
+	list, err := net.Listen("tcp", ":8000")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer list.Close()
+
+	for {
+		conn, acc_err := list.Accept()
+		if acc_err != nil {
+			fmt.Println(acc_err)
+		}
+
+		handleConn(conn)
+	}
+}
+
+func handleConn(conn net.Conn) {
+	time_err := conn.SetDeadline(time.Now().Add(10 * time.Second))
+	if time_err != nil {
+		fmt.Println(time_err)
+	}
+	//create a scanner
+	defer conn.Close()
+	conn_Scanner := bufio.NewScanner(conn)
+	for conn_Scanner.Scan() {
+		text := conn_Scanner.Text()
+		if text == "bye" {
+			break
+		}
+		fmt.Println(text)
+		fmt.Fprintf(conn, "\tI heard you say %s \n", text)
+	}
+
+	fmt.Println("CODE GOT HERE")	
+}

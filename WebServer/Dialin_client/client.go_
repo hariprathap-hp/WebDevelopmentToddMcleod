@@ -1,0 +1,38 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"io/ioutil"
+	"net"
+	"os"
+)
+
+func main() {
+	//client dials in to the network and get any data from server
+	conn, dial_err := net.Dial("tcp", "localhost:8000")
+	if dial_err != nil {
+		fmt.Println(dial_err)
+	}
+	defer conn.Close()
+
+	//get user input and write it to connection
+
+	for {
+		reader := bufio.NewReader(os.Stdin)
+		inp, ip_err := reader.ReadString('\n')
+		if ip_err != nil {
+			fmt.Println(ip_err)
+		}
+		//send the text read to socket
+		fmt.Fprintf(conn, "%s\n", inp+"\n")
+
+		//read the text output from the socket
+		bs, rd_err := ioutil.ReadAll(conn)
+		if rd_err != nil {
+			fmt.Println("Reading from connection error -- ", rd_err)
+		}
+		fmt.Println(string(bs))
+	}
+
+}

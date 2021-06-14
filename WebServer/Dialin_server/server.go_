@@ -1,0 +1,44 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net"
+)
+
+func main() {
+	list, list_err := net.Listen("tcp", ":8000")
+	if list_err != nil {
+		fmt.Println(list_err)
+	}
+
+	defer list.Close()
+
+	for {
+		conn, conn_err := list.Accept()
+		if conn_err != nil {
+			fmt.Println(conn_err)
+		}
+		go handle(conn)
+	}
+}
+
+func handle(c net.Conn) {
+	/*deadline_err := c.SetDeadline(time.Now().Add(10 * time.Second))
+	if deadline_err != nil {
+		fmt.Println(deadline_err)
+	}*/
+	/*scanner := bufio.NewScanner(c)
+
+	for scanner.Scan() {
+		text := scanner.Text()
+		fmt.Println(text)
+	}*/
+
+	defer c.Close()
+	fmt.Fprintf(c, "%s\n", "Hello client, I am Fprintf")
+	io.WriteString(c, "Hi Client, I am io.writestring\n")
+	fmt.Fprintln(c, "Hello client, I am fprintln")
+
+	fmt.Println("Code got here")
+}

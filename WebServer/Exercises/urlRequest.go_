@@ -1,0 +1,47 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"strings"
+)
+
+func main() {
+	//first open a connection to listen
+	list, lis_err := net.Listen("tcp", "localhost:8000")
+	if lis_err != nil {
+		fmt.Println(lis_err)
+	}
+
+	defer list.Close()
+	for {
+		conn, con_err := list.Accept()
+		if con_err != nil {
+			fmt.Println(con_err)
+		}
+
+		go handle(conn)
+
+	}
+}
+
+func handle(conn net.Conn) {
+	i := 0
+	defer conn.Close()
+
+	scanner := bufio.NewScanner(conn)
+	for scanner.Scan() {
+		text := scanner.Text()
+		fmt.Println("Text read is -- ", text)
+		if i == 0 {
+			ln := strings.Fields(text)
+			fmt.Println("Value of line is ", ln)
+		}
+		if text == "" {
+			break
+		}
+		i++
+		//fmt.Println("I is -- ", i)
+	}
+}
