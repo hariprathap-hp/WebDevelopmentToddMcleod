@@ -7,11 +7,61 @@
 </head>
 
 <body>
+    <table style="width:100%">
+        <tr>
+            <th>PE</th>
+            <th>Expiry</th>
+            <th>Strike</th>
+            <th>OI</th>
+            <th>OI-CHG</th>
+            <th>OI-CHG-PCNT</th>
+            <th>TOT_VOL</th>
+            <th>IV</th>
+            <th>L_PRICE</th>
+            <th>PRICE_CHG</th>
+            <th>PRICE_CHG_PCNT</th>
+        </tr>
+
     {{ range .Records.Data}}
         {{if eq .Expirydate "17-Jun-2021"}}
-            {{.Pe}}
+            {{if gt .Strikeprice 33900}}
+                {{if lt .Strikeprice 36000}}
+                    {{if .Pe}}
+                        <tr>
+                        <td>PE</td>
+                        <td>{{.Pe.Expirydate}}</td>
+                        <td>{{.Pe.Strikeprice}}</td>
+                        <td>{{.Pe.Openinterest}}</td>
+                        <td>{{.Pe.Changeinopeninterest}}</td>
+                        <td>{{.Pe.Pchangeinopeninterest}}</td>
+                        <td>{{.Pe.Totaltradedvolume}}</td>
+                        <td>{{.Pe.Impliedvolatility}}</td>
+                        <td>{{.Pe.Lastprice}}</td>
+                        <td>{{.Pe.Change}}</td>
+                        <td>{{.Pe.Pchange}}</td>
+                        </tr>
+                    {{end}}
+                    {{if .Ce}}
+                        <tr>
+                        <td>CE</td>
+                        <td>{{.Ce.Expirydate}}</td>
+                        <td>{{.Ce.Strikeprice}}</td>
+                        <td>{{.Ce.Openinterest}}</td>
+                        <td>{{.Ce.Changeinopeninterest}}</td>
+                        <td>{{.Ce.Pchangeinopeninterest}}</td>
+                        <td>{{.Ce.Totaltradedvolume}}</td>
+                        <td>{{.Ce.Impliedvolatility}}</td>
+                        <td>{{.Ce.Lastprice}}</td>
+                        <td>{{.Ce.Change}}</td>
+                        <td>{{.Ce.Pchange}}</td>
+                        </tr>
+                    {{end}}
+                {{end}}
+            {{end}}
         {{end}}
     {{end}}
+      </table>
+
 </body>
 
 </html>
