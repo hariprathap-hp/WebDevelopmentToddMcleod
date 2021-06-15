@@ -1,0 +1,22 @@
+h1 {
+  color : green;
+}
+
+th {
+  color : rgb(12, 12, 12);
+  font-size: 40;
+  font-style: oblique;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+td {
+  color : green;
+}
+
+table, th, td {
+  border: 1px solid rgb(214, 25, 25);
+}
+
+title {
+  color :rgb(30, 18, 196)
+}

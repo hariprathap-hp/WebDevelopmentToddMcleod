@@ -82,7 +82,7 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal([]byte(result), &option)
 
-	tmpl, parse_err = template.ParseFiles("niftyBank.gohtml")
+	tmpl, parse_err = template.ParseGlob("css/*")
 
 	if parse_err != nil {
 		fmt.Printf("Error while parsing html template file %s", parse_err)
@@ -94,6 +94,7 @@ func main() {
 	//url := "https://nseoptions.s3.ap-south-1.amazonaws.com/data.json"
 
 	http.HandleFunc("/banknifty", fetchURL)
+	http.Handle("/", http.FileServer(http.Dir("css/")))
 	list_err := http.ListenAndServe(":8000", nil)
 	if list_err != nil {
 		fmt.Println(list_err)

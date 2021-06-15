@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+    <meta charset="UTF-8">
+    <title> BANK NIFTY</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+    <p id="pOI" > </p>
+    <table style="width:100%">
+        <tr>
+            <th>ce/pe</th>
+            <th>expiry</th>
+            <th>strike</th>
+            <th>oi</th>
+            <th>oi_chng</th>
+            <th>%-oi_chng</th>
+            <th>volume</th>
+            <th>iv</th>
+            <th>ltp</th>
+            <th>priceChange</th>
+            <th>%-priceChange</th>
+        </tr>
+
+    {{ range .Records.Data}}
+        {{if eq .Expirydate "17-Jun-2021"}}
+            {{if gt .Strikeprice 33900}}
+                {{if lt .Strikeprice 36000}}
+                    {{if .Pe}}
+                        <tr>
+                        <td>PE</td>
+                        <td>{{.Pe.Expirydate}}</td>
+                        <td>{{.Pe.Strikeprice}}</td>
+                        <td>{{.Pe.Openinterest}}</td>
+                        <td>{{.Pe.Changeinopeninterest}}</td>
+                        <td>
+                        <!-- for below code, refer https://www.w3schools.com/js/js_output.asp -->
+                        <script>
+                             var golangVar = "{{.Pe.Pchangeinopeninterest}}"
+                             document.write(Math.round(golangVar*100)/100)
+                        </script>
+                        </td>
+                        <td>{{.Pe.Totaltradedvolume}}</td>
+                        <td>{{.Pe.Impliedvolatility}}</td>
+                        <td>{{.Pe.Lastprice}}</td>
+                        <td>
+                        <script>
+                             var golangVar = "{{.Pe.Change}}"
+                             document.write(Math.round(golangVar*100)/100)
+                        </script>
+                        </td>
+                        <td>
+                        <script>
+                             var golangVar = "{{.Pe.Pchange}}"
+                             document.write(Math.round(golangVar*100)/100)
+                        </script>
+                        </td>
+                        </tr>
+                    {{end}}
+                    {{if .Ce}}
+                        <tr>
+                        <td>CE</td>
+                        <td>{{.Ce.Expirydate}}</td>
+                        <td>{{.Ce.Strikeprice}}</td>
+                        <td>{{.Ce.Openinterest}}</td>
+                        <td>{{.Ce.Changeinopeninterest}}</td>
+                        <td>
+                        <script>
+                             var golangVar = "{{.Ce.Pchangeinopeninterest}}"
+                             document.write(Math.round(golangVar*100)/100)
+                        </script>
+                        </td>
+                        <td>{{.Ce.Totaltradedvolume}}</td>
+                        <td>{{.Ce.Impliedvolatility}}</td>
+                        <td>{{.Ce.Lastprice}}</td>
+                        <td>
+                        <script>
+                             var golangVar = "{{.Ce.Change}}"
+                             document.write(Math.round(golangVar*100)/100)
+                        </script>
+                        </td>
+                        <td>
+                        <script>
+                             var golangVar = "{{.Ce.Pchange}}"
+                             document.write(Math.round(golangVar*100)/100)
+                        </script>
+                        </td>
+                        </tr>
+                    {{end}}
+                {{end}}
+            {{end}}
+        {{end}}
+    {{end}}
+      </table>
+
+<script>
+  function trunc(num) {
+    var res = Math.round(num * 100) / 100
+    alert(res);
+  }
+</script>
+
+</body>
+
+</html>
