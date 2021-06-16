@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> REQUEST VALUES </title>
+    </head>
+
+    <body>
+        <header>
+        {{.}}
+            {{if .Method}} <p> The Request Method is - {{.Method}} </p> {{end}}
+            {{if .Host}} <p>The Host is - {{.Host}}</p>{{end}}
+            {{if .Contentlength}} <p> The Contentlength is - {{.Contentlength}}</p>{{end}}
+        </header>
+
+        <form action = "/formSubmit" method = "POST">
+            <input type="text" name="fname" placeholders="first name">
+            <input type="submit" name="submit-btn" value="Onda Button">
+        </form>
+    </body>
+
+</html>

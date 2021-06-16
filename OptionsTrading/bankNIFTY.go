@@ -9,16 +9,17 @@ import (
 	"net/http"
 )
 
-//var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
+var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
 
-var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data1.json"
+//var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data1.json"
 var tmpl *template.Template
 var parse_err error
+var expiry_Date string
 
 type Options struct {
 	Records struct {
-		//Expirydates []string `json:"expiryDates"`
-		Data []struct {
+		Expirydates []string `json:"expiryDates"`
+		Data        []struct {
 			Strikeprice int    `json:"strikePrice"`
 			Expirydate  string `json:"expiryDate"`
 			Pe          struct {
@@ -82,12 +83,27 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal([]byte(result), &option)
 
-	tmpl, parse_err = template.ParseGlob("css/*")
+	if r.Method == "POST" {
+		r.ParseForm()
+		expiry_Date = r.FormValue("expiry")
+	} else {
+		expiry_Date = option.Records.Expirydates[0]
+	}
+
+	var toHtml = struct {
+		Expiry   string
+		BankInfo Options
+	}{
+		Expiry:   expiry_Date,
+		BankInfo: option,
+	}
+
+	tmpl, parse_err = template.ParseGlob("css/*.gohtml")
 
 	if parse_err != nil {
 		fmt.Printf("Error while parsing html template file %s", parse_err)
 	}
-	tmpl.Execute(w, option)
+	tmpl.Execute(w, toHtml)
 }
 
 func main() {

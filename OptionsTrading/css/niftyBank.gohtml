@@ -9,10 +9,21 @@
 
 <body>
     <p id="pOI" > </p>
+
     <table style="width:100%">
         <tr>
             <th>ce/pe</th>
-            <th>expiry</th>
+            <th>
+                <form action="/banknifty" method="POST">
+                 <select name="expiry" id="expiry">
+                        <option value="Expiry">expiryDates</option>
+                        {{range  $k, $v := .BankInfo.Records.Expirydates}}
+                            <option value={{$v}}>{{$v}}</option>
+                        {{end}}
+                </select>
+                <input type="submit" name="submit"/>
+                </form>
+            </th>
             <th>strike</th>
             <th>oi</th>
             <th>oi_chng</th>
@@ -23,9 +34,11 @@
             <th>priceChange</th>
             <th>%-priceChange</th>
         </tr>
-
-    {{ range .Records.Data}}
-        {{if eq .Expirydate "17-Jun-2021"}}
+   
+    <!-- store te expiry date for which you need to get the info in a variable -->
+    {{$Expiry := .Expiry}}
+    {{ range .BankInfo.Records.Data}}
+        {{if eq .Expirydate $Expiry }}
             {{if gt .Strikeprice 33900}}
                 {{if lt .Strikeprice 36000}}
                     {{if .Pe}}
@@ -40,7 +53,7 @@
                         <script>
                              var golangVar = "{{.Pe.Pchangeinopeninterest}}"
                              document.write(Math.round(golangVar*100)/100)
-                        </script>
+                        </script> 
                         </td>
                         <td>{{.Pe.Totaltradedvolume}}</td>
                         <td>{{.Pe.Impliedvolatility}}</td>
