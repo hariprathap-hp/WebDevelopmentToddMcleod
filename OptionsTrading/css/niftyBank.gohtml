@@ -9,10 +9,15 @@
 </head>
 
 <body>
-    <p id="pOI" > </p>
-    <table style="width:100%">
+    <!-- store te expiry date for which you need to get the info in a variable -->
+    {{$Expiry := .Expiry}}
+    {{$Strike1 := .Strike1}}
+    {{$Strike2 := .Strike2}}
+    {{$FStrike1 := .Fstrike1}}
+    {{$FStrike2 := .Fstrike2}}
+
+    <table id="bankNifty" style="width:100%">
         <tr>
-            <th>ce/pe</th>
             <th>
                 <form action="/banknifty" method="POST">
                  <select name="expiry" id="expiry">
@@ -28,45 +33,87 @@
                  <form action="/banknifty" method="POST">
                     <select name="strike1" id="strikes">
                             <option value="Strike1">strike1</option>
-                            {{range  $v := strPrice }}
+                            {{range  $v := strPrice $FStrike1 $FStrike2}}
                             <option value={{$v}}>{{$v}}</option>
                             {{end}}
                     </select>
                     <select name="strike2" id="strikes">
                             <option value="Strike2">strike2</option>
-                            {{range  $v := strPrice }}
+                            {{range  $v := strPrice $FStrike1 $FStrike2}}
                             <option value={{$v}}>{{$v}}</option>
                             {{end}}
                     </select>
                     <input type="submit" name="submit"/>
                 </form>           
             </th>
+            <th><p1>PE</p1></th>
+            <th>pos</th>
             <th>oi</th>
             <th>oi_chng</th>
             <th>%-oi_chng</th>
-            <th>volume</th>
+            <th>vol</th>
             <th>iv</th>
             <th>ltp</th>
-            <th>priceChange</th>
-            <th>%-priceChange</th>
+            <th>change</th>
+            <th>%-Change</th>
+            
+            <th><p2>CE</p2></th>
+            <th></th>
+            <th>oi</th>
+            <th>oi_chng</th>
+            <th>%-oi_chng</th>
+            <th>vol</th>
+            <th>iv</th>
+            <th>ltp</th>
+            <th>Change</th>
+            <th>%-Change</th>
+
         </tr>
-   
-    <!-- store te expiry date for which you need to get the info in a variable -->
-    {{$Expiry := .Expiry}}
-    {{$Strike1 := .Strike1}}
-    {{$Strike2 := .Strike2}}
 
     {{ range .BankInfo.Records.Data}}
         {{if eq .Expirydate $Expiry }}
             {{if gt .Strikeprice $Strike1}}
                 {{if lt .Strikeprice $Strike2}}
+                <tr>
                     {{if .Pe}}
-                        <tr>
-                        <td>PE</td>
                         <td>{{.Pe.Expirydate}}</td>
                         <td>{{.Pe.Strikeprice}}</td>
+                        <td><p1>PE</p2></td>
+                        <td>
+                        <script>
+                            var OpenInterest = "{{.Pe.Openinterest}}"
+                            var Price = "{{.Pe.Lastprice}}"
+                            if (OpenInterest > 0) {
+                                if(Price > 0) {
+                                    var txt = "l.b↑"
+                                    document.write("<p>" + txt.fontcolor("green") + "</p>");
+                                } else {
+                                    var txt = "s.b↓"
+                                    document.write("<p>" + txt.fontcolor("red") + "</p>");
+                                }
+                            } else {
+                                if(Price > 0) {
+                                    var txt = "s.c↑"
+                                    document.write("<p>" + txt.fontcolor("orange") + "</p>");
+                                } else {
+                                    var txt = "l.u↑"
+                                    document.write("<p>" + txt.fontcolor("red") + "</p>");
+                                }                                
+                            }
+                        </script> 
+                        </td>
                         <td>{{.Pe.Openinterest}}</td>
-                        <td>{{.Pe.Changeinopeninterest}}</td>
+                        <td>
+                        <script>
+                             var golangVar = "{{.Pe.Changeinopeninterest}}"
+                             if (golangVar < 0) {
+                                document.write("<font color=\"red\">"+Math.round(golangVar*100)/100+"</font>")
+                             } else {
+                                document.write(Math.round(golangVar*100)/100)
+                             }                             
+                        </script>
+                        </td>
+
                         <td>
                         <!-- for below code, refer https://www.w3schools.com/js/js_output.asp -->
                         <script>
@@ -80,28 +127,67 @@
                         <td>
                         <script>
                              var golangVar = "{{.Pe.Change}}"
-                             document.write(Math.round(golangVar*100)/100)
+                             if (golangVar < 0) {
+                                document.write("<font color=\"red\">"+Math.round(golangVar*100)/100+"</font>")
+                             } else {
+                                document.write(Math.round(golangVar*100)/100)
+                             }                             
                         </script>
                         </td>
+
                         <td>
                         <script>
                              var golangVar = "{{.Pe.Pchange}}"
                              document.write(Math.round(golangVar*100)/100)
                         </script>
-                        </td>
-                        </tr>
+                        </td>    
                     {{end}}
+
                     {{if .Ce}}
-                        <tr>
-                        <td>CE</td>
-                        <td>{{.Ce.Expirydate}}</td>
-                        <td>{{.Ce.Strikeprice}}</td>
+                        <td><p2>CE</p2></td>
+                     <td>
+                        <script>
+                            var OpenInterest = "{{.Ce.Openinterest}}"
+                            var Price = "{{.Ce.Lastprice}}"
+                            if (OpenInterest > 0) {
+                                if(Price > 0) {
+                                    var txt = "l.b↑"
+                                    document.write("<p>" + txt.fontcolor("green") + "</p>");
+                                } else {
+                                    var txt = "s.b↓"
+                                    document.write("<p>" + txt.fontcolor("red") + "</p>");
+                                }
+                            } else {
+                                if(Price > 0) {
+                                    var txt = "s.c↑"
+                                    document.write("<p>" + txt.fontcolor("orange") + "</p>");
+                                } else {
+                                    var txt = "l.u↑"
+                                    document.write("<p>" + txt.fontcolor("red") + "</p>");
+                                }                                
+                            }
+                        </script> 
+                        </td>                        
                         <td>{{.Ce.Openinterest}}</td>
-                        <td>{{.Ce.Changeinopeninterest}}</td>
+                        <td>
+                        <script>
+                             var golangVar = "{{.Ce.Changeinopeninterest}}"
+                             if (golangVar < 0) {
+                                document.write("<font color=\"red\">"+Math.round(golangVar*100)/100+"</font>")
+                             } else {
+                                document.write(Math.round(golangVar*100)/100)
+                             }                             
+                        </script>                        
+                        </td>
+
                         <td>
                         <script>
                              var golangVar = "{{.Ce.Pchangeinopeninterest}}"
-                             document.write(Math.round(golangVar*100)/100)
+                             if (golangVar == 0) {
+                                document.write(0)
+                             } else {
+                                document.write(Math.round(golangVar*100)/100)
+                                }
                         </script>
                         </td>
                         <td>{{.Ce.Totaltradedvolume}}</td>
@@ -110,17 +196,22 @@
                         <td>
                         <script>
                              var golangVar = "{{.Ce.Change}}"
-                             document.write(Math.round(golangVar*100)/100)
-                        </script>
+                             if (golangVar < 0) {
+                                document.write("<font color=\"red\">"+Math.round(golangVar*100)/100+"</font>")
+                             } else {
+                                document.write(Math.round(golangVar*100)/100)
+                             }                             
+                        </script> 
                         </td>
+
                         <td>
                         <script>
-                             var golangVar = "{{.Ce.Pchange}}"
-                             document.write(Math.round(golangVar*100)/100)
+                            var Pchange = "{{.Ce.Pchange}}"
+                            document.write(Math.round(Pchange*100)/100)
                         </script>
                         </td>
-                        </tr>
                     {{end}}
+                </tr>
                 {{end}}
             {{end}}
         {{end}}
@@ -128,8 +219,15 @@
       </table>
 
 <script>
+  function rows() {
+    var len = document.getElementById("bankNifty").rows.length;
+    alert(len);
+  }
+
+</script>
+<script>
   function trunc(num) {
-    var res = Math.round(num * 100) / 100
+    var res = Math.round(num * 100) / 100;
     alert(res);
   }
 </script>

@@ -3,20 +3,32 @@ h1 {
 }
 
 th {
-  color : rgb(12, 12, 12);
+  color : black;
   font-size: 40;
   font-style: oblique;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 td {
-  color : rgb(47, 28, 131);
+  color : rgb(105, 238, 231);
 }
 
 table, th, td {
-  border: 1px solid rgb(214, 64, 18);
+  border: 1px solid rgb(17, 17, 17);
 }
 
 title {
-  color :rgb(30, 18, 196)
+  color :rgb(30, 18, 196);
+}
+
+p1 {
+  color : blueviolet;
+}
+
+p2 {
+  color : green;
+}
+
+neg {
+  color : red
 }

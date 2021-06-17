@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
@@ -16,7 +17,7 @@ var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
 //var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data1.json"
 var tmpl *template.Template
 var parse_err error
-var expiry_Date string
+var expiry_Date = "17-Jun-2021"
 var strike1 = 32500
 var strike2 = 37500
 
@@ -25,12 +26,10 @@ var ft = template.FuncMap{
 	"strPrice": retStrike,
 }
 
-func retStrike() []int {
+func retStrike(a, b int) []int {
 	var strike []int
-	j := 0
-	for i := 32500; i <= 37500; {
+	for i := a; i <= b; {
 		strike = append(strike, i)
-		j++
 		i = i + 100
 	}
 	return strike
@@ -107,6 +106,10 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal([]byte(result), &option)
 
+	//initialize the default variables for the range of strike prices
+	//fStrike1 = option.Records.Data[0].Strikeprice + 14000
+	//fStrike2 = option.Records.Data[0].Strikeprice + 20000
+
 	if r.Method == "POST" {
 		r.ParseForm()
 		fmt.Println(r.Form)
@@ -116,32 +119,40 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 		if (r.FormValue("strike1") != "") || (r.FormValue("strike2") != "") {
 			strike1, _ = strconv.Atoi(r.FormValue("strike1"))
 			strike2, _ = strconv.Atoi(r.FormValue("strike2"))
+
+			if strike1 > strike2 {
+				temp := strike1
+				strike1 = strike2
+				strike2 = temp
+			}
 		}
 	} else {
-		expiry_Date = option.Records.Expirydates[0]
+		expiry_Date = "17-Jun-2021"
 		strike1 = 32500
 		strike2 = 37500
 	}
 
 	var toHtml = struct {
 		Expiry   string
+		Fstrike1 int
+		Fstrike2 int
 		Strike1  int
 		Strike2  int
 		BankInfo Options
 	}{
 		Expiry:   expiry_Date,
+		Fstrike1: 32000,
+		Fstrike2: 38000,
 		Strike1:  strike1,
 		Strike2:  strike2,
 		BankInfo: option,
 	}
 
-	//tmpl, parse_err = template.ParseGlob("css/*.gohtml")
-
 	if parse_err != nil {
 		fmt.Printf("Error while parsing html template file %s", parse_err)
 	}
-	fmt.Println(expiry_Date, strike1, strike2)
-	fmt.Println("Before Template Execute")
+	fmt.Println(time.Now().Weekday())
+	fmt.Println(expiry_Date, "Before Template Execution")
 	tmpl.ExecuteTemplate(w, "niftyBank.gohtml", toHtml)
 }
 
