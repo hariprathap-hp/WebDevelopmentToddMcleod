@@ -10,11 +10,11 @@ th {
 }
 
 td {
-  color : green;
+  color : rgb(47, 28, 131);
 }
 
 table, th, td {
-  border: 1px solid rgb(214, 25, 25);
+  border: 1px solid rgb(214, 64, 18);
 }
 
 title {

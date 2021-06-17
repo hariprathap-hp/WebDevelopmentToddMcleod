@@ -7,6 +7,8 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
@@ -15,6 +17,28 @@ var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
 var tmpl *template.Template
 var parse_err error
 var expiry_Date string
+var strike1 = 32500
+var strike2 = 37500
+
+var ft = template.FuncMap{
+	"uc":       strings.ToUpper,
+	"strPrice": retStrike,
+}
+
+func retStrike() []int {
+	var strike []int
+	j := 0
+	for i := 32500; i <= 37500; {
+		strike = append(strike, i)
+		j++
+		i = i + 100
+	}
+	return strike
+}
+
+func init() {
+	tmpl = template.Must(template.New("").Funcs(ft).ParseFiles("./css/niftyBank.gohtml"))
+}
 
 type Options struct {
 	Records struct {
@@ -85,30 +109,43 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		r.ParseForm()
-		expiry_Date = r.FormValue("expiry")
+		fmt.Println(r.Form)
+		if r.FormValue("expiry") != "" {
+			expiry_Date = r.FormValue("expiry")
+		}
+		if (r.FormValue("strike1") != "") || (r.FormValue("strike2") != "") {
+			strike1, _ = strconv.Atoi(r.FormValue("strike1"))
+			strike2, _ = strconv.Atoi(r.FormValue("strike2"))
+		}
 	} else {
 		expiry_Date = option.Records.Expirydates[0]
+		strike1 = 32500
+		strike2 = 37500
 	}
 
 	var toHtml = struct {
 		Expiry   string
+		Strike1  int
+		Strike2  int
 		BankInfo Options
 	}{
 		Expiry:   expiry_Date,
+		Strike1:  strike1,
+		Strike2:  strike2,
 		BankInfo: option,
 	}
 
-	tmpl, parse_err = template.ParseGlob("css/*.gohtml")
+	//tmpl, parse_err = template.ParseGlob("css/*.gohtml")
 
 	if parse_err != nil {
 		fmt.Printf("Error while parsing html template file %s", parse_err)
 	}
-	tmpl.Execute(w, toHtml)
+	fmt.Println(expiry_Date, strike1, strike2)
+	fmt.Println("Before Template Execute")
+	tmpl.ExecuteTemplate(w, "niftyBank.gohtml", toHtml)
 }
 
 func main() {
-	//url := "https://nseoptions.s3.ap-south-1.amazonaws.com/data.json"
-
 	http.HandleFunc("/banknifty", fetchURL)
 	http.Handle("/", http.FileServer(http.Dir("css/")))
 	list_err := http.ListenAndServe(":8000", nil)
