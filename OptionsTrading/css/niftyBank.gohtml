@@ -16,36 +16,34 @@
     {{$FStrike1 := .Fstrike1}}
     {{$FStrike2 := .Fstrike2}}
 
+    <form action="/banknifty" method="POST">
+        <p2> CHOOSE YOUR EXPIRY DATE AND STRIKES :  </p2>
+        <select name="expiry" id="expiry">
+             <option value="24-Jun-2021">expiryDates</option>
+               {{range  $k, $v := .BankInfo.Records.Expirydates}}
+               <option value={{$v}}>{{$v}}</option>
+               {{end}}
+        </select>
+
+        <select name="strike1" id="strikes">
+                <option value="0">strike1</option>
+                {{range  $v := strPrice $FStrike1 $FStrike2}}
+                <option value={{$v}}>{{$v}}</option>
+                {{end}}
+        </select>
+        <select name="strike2" id="strikes">
+                <option value="0">strike2</option>
+               {{range  $v := strPrice $FStrike1 $FStrike2}}
+                <option value={{$v}}>{{$v}}</option>
+                {{end}}
+        </select>
+        <input type="submit" name="submit"/>
+    </form>               
+
     <table id="bankNifty" style="width:100%">
         <tr>
-            <th>
-                <form action="/banknifty" method="POST">
-                 <select name="expiry" id="expiry">
-                        <option value="Expiry">expiryDates</option>
-                        {{range  $k, $v := .BankInfo.Records.Expirydates}}
-                            <option value={{$v}}>{{$v}}</option>
-                        {{end}}
-                </select>
-                <input type="submit" name="submit"/>
-                </form>
-            </th>
-            <th>
-                 <form action="/banknifty" method="POST">
-                    <select name="strike1" id="strikes">
-                            <option value="Strike1">strike1</option>
-                            {{range  $v := strPrice $FStrike1 $FStrike2}}
-                            <option value={{$v}}>{{$v}}</option>
-                            {{end}}
-                    </select>
-                    <select name="strike2" id="strikes">
-                            <option value="Strike2">strike2</option>
-                            {{range  $v := strPrice $FStrike1 $FStrike2}}
-                            <option value={{$v}}>{{$v}}</option>
-                            {{end}}
-                    </select>
-                    <input type="submit" name="submit"/>
-                </form>           
-            </th>
+            <th>expiry</th>
+            <th>strikes</th>
             <th><p1>PE</p1></th>
             <th>pos</th>
             <th>oi</th>
@@ -57,8 +55,8 @@
             <th>change</th>
             <th>%-Change</th>
             
-            <th><p2>CE</p2></th>
-            <th></th>
+            <th><p1>CE</p1></th>
+            <th>pos</th>
             <th>oi</th>
             <th>oi_chng</th>
             <th>%-oi_chng</th>
@@ -81,8 +79,8 @@
                         <td><p1>PE</p2></td>
                         <td>
                         <script>
-                            var OpenInterest = "{{.Pe.Openinterest}}"
-                            var Price = "{{.Pe.Lastprice}}"
+                            var OpenInterest = "{{.Pe.Changeinopeninterest}}"
+                            var Price = "{{.Pe.Change}}"
                             if (OpenInterest > 0) {
                                 if(Price > 0) {
                                     var txt = "l.b↑"
@@ -144,11 +142,11 @@
                     {{end}}
 
                     {{if .Ce}}
-                        <td><p2>CE</p2></td>
+                        <td><p1>CE</p1></td>
                      <td>
                         <script>
-                            var OpenInterest = "{{.Ce.Openinterest}}"
-                            var Price = "{{.Ce.Lastprice}}"
+                            var OpenInterest = "{{.Ce.Changeinopeninterest}}"
+                            var Price = "{{.Ce.Change}}"
                             if (OpenInterest > 0) {
                                 if(Price > 0) {
                                     var txt = "l.b↑"

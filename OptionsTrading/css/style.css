@@ -10,11 +10,11 @@ th {
 }
 
 td {
-  color : rgb(105, 238, 231);
+  color : rgb(26, 73, 204);
 }
 
-table, th, td {
-  border: 1px solid rgb(17, 17, 17);
+table {
+ border: 2px solid rgb(10, 10, 10);
 }
 
 title {
@@ -22,7 +22,7 @@ title {
 }
 
 p1 {
-  color : blueviolet;
+  color : #FFC300 ;
 }
 
 p2 {
@@ -32,3 +32,33 @@ p2 {
 neg {
   color : red
 }
+
+#bankNifty {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#bankNifty th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: small;
+}
+
+#bankNifty td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: small;
+}
+
+#bankNifty tr:nth-child(even){background-color: #f2f2f2;}
+
+#bankNifty tr:hover {background-color: #ddd;}
+
+#bankNifty th {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-align: center;
+  background-color: #04AA6D;
+  color: white;
+} 
