@@ -33,6 +33,10 @@ neg {
   color : red
 }
 
+st {
+  color : black
+}
+
 #bankNifty {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;

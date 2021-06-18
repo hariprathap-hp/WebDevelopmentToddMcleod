@@ -43,7 +43,6 @@
     <table id="bankNifty" style="width:100%">
         <tr>
             <th>expiry</th>
-            <th>strikes</th>
             <th><p1>PE</p1></th>
             <th>pos</th>
             <th>oi</th>
@@ -54,7 +53,7 @@
             <th>ltp</th>
             <th>change</th>
             <th>%-Change</th>
-            
+            <th>strikes</th>            
             <th><p1>CE</p1></th>
             <th>pos</th>
             <th>oi</th>
@@ -75,7 +74,6 @@
                 <tr>
                     {{if .Pe}}
                         <td>{{.Pe.Expirydate}}</td>
-                        <td>{{.Pe.Strikeprice}}</td>
                         <td><p1>PE</p2></td>
                         <td>
                         <script>
@@ -139,6 +137,7 @@
                              document.write(Math.round(golangVar*100)/100)
                         </script>
                         </td>    
+                      <td><strong><st>{{.Pe.Strikeprice}}</st></strong></td>                        
                     {{end}}
 
                     {{if .Ce}}
