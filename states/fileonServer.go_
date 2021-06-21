@@ -1,0 +1,47 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+)
+
+func main() {
+	http.HandleFunc("/", foo)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	var s string
+
+	if r.Method == http.MethodPost {
+		f, h, err := r.FormFile("q")
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		defer f.Close()
+		fmt.Println("\nFile:", f, "\nheader:", h.Filename, "\nerr", err)
+
+		bs, _ := ioutil.ReadAll(f)
+		nf, err := os.Create("duplicate.txt")
+		if err != nil {
+			log.Println("Can't create a new file", err)
+		}
+		defer nf.Close()
+		s = string(bs)
+		io.WriteString(nf, s)
+	}
+
+	w.Header().Set("Content-Type", "text/html;charset=utf-8")
+	io.WriteString(w, `
+	<form method="POST" enctype="multipart/form-data">
+	<input type="file" name="q">
+	<input type="submit">
+	</form>
+	<br>`+s)
+}

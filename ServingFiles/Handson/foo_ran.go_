@@ -1,0 +1,33 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"text/template"
+)
+
+func main() {
+	http.HandleFunc("/", foo)
+	http.HandleFunc("/dog/", dog)
+	http.HandleFunc("/pacino/", pacino)
+	log.Fatalln(http.ListenAndServe("localhost:8000", nil))
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "foo ran")
+}
+
+func dog(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("dog.gohtml")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	tmpl.ExecuteTemplate(w, "dog.gohtml", nil)
+}
+
+func pacino(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "al.jpg")
+}

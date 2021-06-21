@@ -17,22 +17,23 @@
     {{$FStrike2 := .Fstrike2}}
 
     <form action="/banknifty" method="POST">
-        <p2> CHOOSE YOUR EXPIRY DATE AND STRIKES :  </p2>
+        <p2> <strong>Choose Your Expiry Date -> </strong> </p2>
         <select name="expiry" id="expiry">
-             <option value="24-Jun-2021">expiryDates</option>
+             <option value="{{$Expiry}}"><neg>expiryDates</neg></option>
                {{range  $k, $v := .BankInfo.Records.Expirydates}}
                <option value={{$v}}>{{$v}}</option>
                {{end}}
         </select>
 
+        <p2> <strong> Choose Your Strike Prices -> </strong> </p2>
         <select name="strike1" id="strikes">
-                <option value="0">strike1</option>
+                <option value="{{$Strike1}}">strike1</option>
                 {{range  $v := strPrice $FStrike1 $FStrike2}}
                 <option value={{$v}}>{{$v}}</option>
                 {{end}}
         </select>
         <select name="strike2" id="strikes">
-                <option value="0">strike2</option>
+                <option value="{{$Strike2}}">strike2</option>
                {{range  $v := strPrice $FStrike1 $FStrike2}}
                 <option value={{$v}}>{{$v}}</option>
                 {{end}}
@@ -89,10 +90,10 @@
                                 }
                             } else {
                                 if(Price > 0) {
-                                    var txt = "s.c↑"
-                                    document.write("<p>" + txt.fontcolor("orange") + "</p>");
+                                    var txt = "s.c↓"
+                                    document.write("<p>" + txt.fontcolor("purple") + "</p>");
                                 } else {
-                                    var txt = "l.u↑"
+                                    var txt = "l.u↓"
                                     document.write("<p>" + txt.fontcolor("red") + "</p>");
                                 }                                
                             }

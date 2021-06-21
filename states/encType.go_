@@ -1,0 +1,28 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"text/template"
+)
+
+func main() {
+	http.HandleFunc("/", foo)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	bs := make([]byte, r.ContentLength)
+	r.Body.Read(bs)
+	p := string(bs)
+	tmpl, err := template.ParseFiles("encType.gohtml")
+	if err != nil {
+		fmt.Println("Template Parsing Error")
+	}
+	t_err := tmpl.ExecuteTemplate(w, "encType.gohtml", p)
+	if t_err != nil {
+		fmt.Println("Template Execution Failed")
+	}
+
+}

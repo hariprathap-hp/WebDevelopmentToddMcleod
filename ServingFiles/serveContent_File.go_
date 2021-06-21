@@ -1,0 +1,40 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
+)
+
+func main() {
+	http.HandleFunc("/dog/", dog)
+	http.HandleFunc("/al_p.jpg/", dogPic)
+	http.HandleFunc("/serveFile/", serveFile)
+	log.Fatalln(http.ListenAndServe("localhost:8000", nil))
+}
+
+func serveFile(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "al_pacino.jpg")
+}
+
+func dog(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	io.WriteString(w, `<img src="Golde33443.jpg">`)
+}
+
+func dogPic(w http.ResponseWriter, r *http.Request) {
+	f, err := os.Open("al_pacino.jpg")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+
+	fi, err := f.Stat()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	http.ServeContent(w, r, fi.Name(), fi.ModTime(), f)
+}

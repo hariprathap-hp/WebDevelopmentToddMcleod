@@ -2,21 +2,6 @@ h1 {
   color : green;
 }
 
-th {
-  color : black;
-  font-size: 40;
-  font-style: oblique;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-td {
-  color : rgb(26, 73, 204);
-}
-
-table {
- border: 2px solid rgb(10, 10, 10);
-}
-
 title {
   color :rgb(30, 18, 196);
 }
@@ -26,7 +11,7 @@ p1 {
 }
 
 p2 {
-  color : green;
+  color : #800000;
 }
 
 neg {
@@ -51,7 +36,9 @@ st {
 
 #bankNifty td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding:1px; 
+  margin:1px;
+  text-align: center;
   font-size: small;
 }
 

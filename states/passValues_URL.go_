@@ -1,0 +1,19 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+)
+
+func main() {
+	http.HandleFunc("/", valURL)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func valURL(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	fmt.Println(r.FormValue("q"))
+	io.WriteString(w, r.FormValue("q"))
+}

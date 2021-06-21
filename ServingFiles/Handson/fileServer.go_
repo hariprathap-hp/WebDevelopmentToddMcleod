@@ -1,0 +1,12 @@
+package main
+
+import (
+	"log"
+	"net/http"
+)
+
+func main() {
+	fs := http.FileServer(http.Dir("../Handson"))
+	http.Handle("/", fs)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}

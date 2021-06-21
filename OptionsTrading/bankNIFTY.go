@@ -12,9 +12,9 @@ import (
 	"time"
 )
 
-//var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
+var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
 
-var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data1.json"
+//var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data1.json"
 var tmpl *template.Template
 var parse_err error
 var expiry_Date = "17-Jun-2021"
@@ -117,7 +117,6 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 			expiry_Date = r.FormValue("expiry")
 		}
 		if (r.FormValue("strike1") != "0") || (r.FormValue("strike2") != "0") {
-			fmt.Println("if part")
 			strike1, _ = strconv.Atoi(r.FormValue("strike1"))
 			strike2, _ = strconv.Atoi(r.FormValue("strike2"))
 
@@ -156,7 +155,7 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 	if parse_err != nil {
 		fmt.Printf("Error while parsing html template file %s", parse_err)
 	}
-	fmt.Println(time.Now().Weekday())
+	fmt.Println(time.Now())
 	fmt.Println(expiry_Date, strike1, strike2, "Before Template Execution")
 	tmpl.ExecuteTemplate(w, "niftyBank.gohtml", toHtml)
 }

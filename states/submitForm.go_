@@ -1,0 +1,36 @@
+package main
+
+import (
+	"log"
+	"net/http"
+	"text/template"
+)
+
+var tmpl = template.Must(template.ParseFiles("submit.gohtml"))
+
+type Person struct {
+	First        string
+	Last         string
+	IsSubscribed bool
+}
+
+func main() {
+	http.HandleFunc("/", submit)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func submit(w http.ResponseWriter, r *http.Request) {
+
+	f := r.FormValue("fname")
+	l := r.FormValue("lname")
+	s := r.FormValue("subscribed") == "on"
+
+	p := Person{
+		First:        f,
+		Last:         l,
+		IsSubscribed: s,
+	}
+
+	tmpl.ExecuteTemplate(w, "submit.gohtml", p)
+
+}
