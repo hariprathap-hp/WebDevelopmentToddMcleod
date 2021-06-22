@@ -1,0 +1,30 @@
+package main
+
+import (
+	"io"
+	"log"
+	"net/http"
+	"strconv"
+)
+
+func main() {
+	http.HandleFunc("/set", set)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func set(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("counter")
+
+	if err == http.ErrNoCookie {
+		c = &http.Cookie{
+			Name:  "counter",
+			Value: "0",
+		}
+	}
+
+	count, _ := strconv.Atoi(c.Value)
+	count++
+	c.Value = strconv.Itoa(count)
+	http.SetCookie(w, c)
+	io.WriteString(w, "You have accessed the site now "+c.Value+" times")
+}
