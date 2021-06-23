@@ -1,0 +1,91 @@
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+
+	uuid "github.com/satori/go.uuid"
+)
+
+//Create a user struct
+type user struct {
+	Uname string
+	Fname string
+	Lname string
+}
+
+var tmpl *template.Template
+
+//create the maps
+var dbUsers = map[string]user{}
+var dbSessions = map[string]string{}
+
+func init() {
+	tmpl = template.Must(template.ParseGlob("templates/*"))
+}
+
+func main() {
+	http.HandleFunc("/", store)
+	http.HandleFunc("/restore", restore)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+//This function is to store the user information
+func store(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Func Store Printing Method", r.Method)
+	//get the cookie by its name
+	cookie, err := r.Cookie("session")
+	//If the cookie is not present, create a new cookie
+	if err != nil {
+		fmt.Println("Cookie Already Not present")
+		//create the session id
+		sID, _ := uuid.NewV4()
+		cookie = &http.Cookie{
+			Name:  "session",
+			Value: sID.String(),
+		}
+		http.SetCookie(w, cookie)
+	}
+
+	//	if the user already exixts, get the user
+	var u user
+	//using the session id, get the user name
+	if un, ok := dbSessions[cookie.Value]; ok {
+		//using the username, get the user structure
+		u = dbUsers[un]
+	}
+	if r.Method == http.MethodPost {
+		un := r.FormValue("uname")
+		fn := r.FormValue("fname")
+		ln := r.FormValue("lname")
+		u = user{
+			un, fn, ln,
+		}
+		//now create an entry in the maps
+		dbSessions[cookie.Value] = un
+		dbUsers[un] = u
+	}
+
+	tmpl.ExecuteTemplate(w, "index.gohtml", u)
+}
+
+//This function is to restore user information from previous session
+func restore(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Inside fun restore")
+	c, err := r.Cookie("session")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var u user
+	un, ok := dbSessions[c.Value]
+
+	if ok {
+		u = dbUsers[un]
+	}
+
+	tmpl.ExecuteTemplate(w, "restore.gohtml", u)
+}

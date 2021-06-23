@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <h1> SIGN UP PAGE </h1>
+</head>
+
+<body>
+    <form method="POST">
+        <label for="uname">User name:</label>
+        <input type="text" name="uname" placeholder="username: ">
+        <br>
+        <label for="pwd">Password:</label>
+        <input type="password" name="password" id="myInput">
+        <input type="checkbox" onclick="myFunction()">Show Password
+        <br>
+        <label for="fname">First name:</label>
+        <input type="text" name="fname">
+        <br>
+        <label for="lname">Last name:</label>
+        <input type="text" name="lname">
+        <br>
+        <input type="submit">
+    </form>
+
+    {{if .Uname}}
+        {{.}}
+    {{end}}
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myInput");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
+</body>
+</html>

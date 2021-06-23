@@ -1,0 +1,32 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	uuid "github.com/satori/go.uuid"
+)
+
+func main() {
+	http.HandleFunc("/uuid", uuidHandler)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func uuidHandler(w http.ResponseWriter, r *http.Request) {
+	//check if the request has cookies
+	cookie, err := r.Cookie("unique")
+
+	//If the cookie is not there, create a new cookie and set it
+	if err != nil {
+		id, _ := uuid.NewV4()
+		cookie = &http.Cookie{
+			Name:  "unique",
+			Value: id.String(),
+			//Secure: true,
+			HttpOnly: true,
+		}
+		http.SetCookie(w, cookie)
+	}
+	fmt.Println(cookie)
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html charset="utf-8">
+
+<head>
+    <meta charse="utf-8">
+</head>
+
+<body>
+    <form method="POST">
+    <input type="text" name="uname" placeholder="user name">
+    <input type="text" name="fname" placeholder="first name">
+    <input type="text" name="lname" placeholder="last name">
+    <input type="submit">
+    </form>
+
+    <h1><a href="/restore"> restore </a></h1>
+    {{if .Fname}}
+        {{.Uname}}
+        {{.Fname}}
+        {{.Lname}}
+    {{end}}
+</body>
+
+</html>
