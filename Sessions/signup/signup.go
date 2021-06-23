@@ -16,6 +16,7 @@ type User struct {
 	Password []byte
 	Fname    string
 	Lname    string
+	Role     string
 }
 
 //Create the maps for dbSessions and dbUsers
@@ -27,7 +28,7 @@ var tmpl *template.Template
 func init() {
 	tmpl = template.Must(template.ParseGlob(("templates/*.gohtml")))
 	bs, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.MinCost)
-	dbUsers["hfiery@gmail.com"] = User{"hfiery@gmail.com", bs, "Hari", "Password"}
+	dbUsers["hfiery@gmail.com"] = User{"hfiery@gmail.com", bs, "Hari", "Password", "007"}
 }
 
 func main() {
@@ -51,6 +52,12 @@ func bar(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
+
+	if u.Role != "007" {
+		http.Error(w, "Only the user 007 is allowed inside the bar", http.StatusForbidden)
+		return
+	}
+
 	tmpl.ExecuteTemplate(w, "bar.gohtml", u)
 }
 
@@ -68,6 +75,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		p := r.FormValue("password")
 		f := r.FormValue("fname")
 		l := r.FormValue("lname")
+		role := r.FormValue("role")
 
 		//If username already taken, forbid it
 		if _, ok := dbUsers[u]; ok {
@@ -90,7 +98,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		usr := User{
-			u, bs, f, l,
+			u, bs, f, l, role,
 		}
 		dbUsers[u] = usr
 

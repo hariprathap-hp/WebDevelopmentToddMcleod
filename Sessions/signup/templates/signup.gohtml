@@ -20,7 +20,13 @@
         <label for="lname">Last name:</label>
         <input type="text" name="lname">
         <br>
-        <input type="submit">
+        <select name="role" id="sr">
+          <option value="user">user</option>
+          <option value="admin">admin</option>
+          <option value="007">007</option>
+        </select>
+        <br>
+        <input type=submit>
     </form>
 
     {{if .Uname}}
