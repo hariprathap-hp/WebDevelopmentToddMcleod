@@ -1,0 +1,21 @@
+package main
+
+import (
+	"crypto/hmac"
+	"crypto/sha1"
+	"fmt"
+	"io"
+)
+
+func main() {
+	h1 := getCode("Hari")
+	h2 := getCode("Prathap")
+	fmt.Println(h1)
+	fmt.Println(h2)
+}
+
+func getCode(s string) string {
+	h := hmac.New(sha1.New, []byte("ourkey"))
+	io.WriteString(h, s)
+	return fmt.Sprintf("%x", h.Sum(nil))
+}

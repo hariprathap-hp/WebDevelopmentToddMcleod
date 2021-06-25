@@ -1,0 +1,67 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+	"time"
+)
+
+type str string
+
+var userID str
+var fname, name str
+
+func main() {
+	http.HandleFunc("/bar", bar)
+	http.HandleFunc("/", foo)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	con := r.Context()
+	fmt.Println(con)
+	fmt.Fprintln(w, con)
+}
+
+func bar(w http.ResponseWriter, r *http.Request) {
+	userID = "userID"
+	fname = "fname"
+	name = "James Bond"
+
+	cxt := r.Context()
+	cxt = context.WithValue(cxt, userID, 007)
+	cxt = context.WithValue(cxt, fname, name)
+	uID, err := dbAccess(cxt)
+	if err != nil {
+		fmt.Fprintln(w, err)
+		return
+	}
+	fmt.Fprintln(w, uID)
+}
+
+func dbAccess(ctx context.Context) (int, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*6)
+	defer cancel()
+
+	//create a channel. Why? To communicate values between goroutines
+	ch := make(chan int)
+
+	go func() {
+		uID := ctx.Value(userID).(int)
+		time.Sleep(4 * time.Second)
+
+		if ctx.Err() != nil {
+			return
+		}
+		ch <- uID
+	}()
+
+	select {
+	case <-ctx.Done():
+		return 0, ctx.Err()
+	case i := <-ch:
+		return i, nil
+	}
+}
