@@ -1,0 +1,67 @@
+package main
+
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+)
+
+type person struct {
+	Captain string
+	VC      string
+	Players []string
+}
+
+func main() {
+	http.HandleFunc("/", foo)
+	http.HandleFunc("/marsh", marsh)
+	http.HandleFunc("/encd", encode)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte(`
+	<!DOCTYPE HTML>
+	<html lang="en">
+	<head>
+		<h1> FOO is here </h1>
+	</head>
+	<body>
+		<h1> You have entered FOO </h1>
+		<a href="marsh">Marshal</a>
+		<a href="http://localhost:8000/encd">JSON Encoding</a>
+	</body>
+	</html>`))
+}
+
+func marsh(w http.ResponseWriter, r *http.Request) {
+	//create an instance of a person
+	india := person{
+		Captain: "Virat",
+		VC:      "Ajinkya",
+		Players: []string{"Rohit", "Shubman", "Chateshwar", "Virat(C)", "Ajinkya", "Rishab"},
+	}
+
+	//convert the Go object india to json object
+	jo, err := json.Marshal(india)
+	if err != nil {
+		log.Println("JSON encoding failed")
+	}
+	w.Write(jo)
+}
+
+func encode(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	//create an instance of a person
+	india := person{
+		Captain: "Virat",
+		VC:      "Ajinkya",
+		Players: []string{"Rohit", "Shubman", "Chateshwar", "Virat(C)", "Ajinkya", "Rishab", "Ravindra"},
+	}
+
+	err := json.NewEncoder(w).Encode(india)
+	if err != nil {
+		log.Println(err)
+	}
+}

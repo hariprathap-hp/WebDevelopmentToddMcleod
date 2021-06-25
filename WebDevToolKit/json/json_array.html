@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <h1> Create JSON Object </h1>
+</head>
+
+<body>
+    <script>
+        var http_status = [
+            {"code":200, "Descrip": "OK"},
+            {"code":201, "Descrip": " Created"},
+            {"code":202, "Descrip": " Accepted"},
+            {"code":203, "Descrip": " Non-authoritative Information"},
+            {"code":204, "Descrip": " No Content"},
+            {"code":205, "Descrip": " Reset Content"},
+            {"code":206, "Descrip": " Partial Content"},
+            {"code":207, "Descrip": " Multi-Status"},
+            {"code":208, "Descrip": " Already Reported"},
+            {"code":226, "Descrip": " IM Used"}
+        ];
+
+        var http_str = JSON.stringify(http_status)
+        document.write(http_str)
+    </script>
+</body>
+</html>

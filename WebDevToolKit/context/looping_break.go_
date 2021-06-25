@@ -1,0 +1,53 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+	"time"
+)
+
+func main() {
+	http.HandleFunc("/", foo)
+	http.HandleFunc("/bar", bar)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	fmt.Println(ctx)
+}
+
+func bar(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	ctx, cancel := context.WithTimeout(ctx, (10 * time.Second))
+	defer cancel()
+
+	for i := range dbAssets(ctx) {
+		if i == 5 {
+			cancel()
+			break
+		}
+		fmt.Println(i)
+	}
+}
+
+func dbAssets(ctx context.Context) <-chan int {
+	ch := make(chan int)
+	go func() {
+		var n int
+		for {
+			select {
+			//when n==5, context cancel will be called and it hits here and cancels the for loop as well
+			case <-ctx.Done():
+				fmt.Println("Done")
+				return
+			case ch <- n:
+				n++
+			}
+		}
+
+	}()
+	return ch
+}
