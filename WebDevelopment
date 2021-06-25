@@ -1,0 +1,230 @@
+Request - Response Handling,
+----------------------------
+Refer the link for more information,
+	-> https://www.alexedwards.net/blog/a-recap-of-request-handling
+
+What is a http.Request?
+ 	-> It is a structure which contains fields related to a request like URL, request method
+ 	
+http.listenandserve:
+	-> The http.ListenAndServe(":8000", nil) function is the most straightforward approach to start a HTTP 1.1 server
+	
+What is the "nil" rgument in the above function?
+	-> What is the nil second argument above? The documentation states that the second argument to the function should be a “handler” and if it is specified as nil, it defaults to DefaultServeMux
+	
+
+Why ListenandServe is wrapped inside log.Fatalln?
+	-> ListenAndServe always returns an error, since it only returns when an unexpected error occurs. In order to log that error we wrap the function call with log.Fatal
+	
+How to write "NotFoundHandler" which returns a "404" error?
+	-> https://play.golang.org/p/HZYVCXeu4sW //run this on vscode and not on go playground
+	
+	##########################################################################################################################
+	
+What is ServeMux?
+	-> It is created using "mux := http.NewServeMux()"
+
+How to register with a ServeMux?
+	-> using "mux.Handle"
+	
+For servermux, refer the below codes
+	-> https://www.alexedwards.net/blog/a-recap-of-request-handling
+	-> /home/hari/go/src/The_Go_Prog_Language/WebServer/ServeMuxHandlers.go
+	-> 
+	
+What is a ServeMux and a Handler?
+	Again refer "https://www.alexedwards.net/blog/a-recap-of-request-handling"
+	
+To implement custom Handler:
+	/home/hari/go/src/The_Go_Prog_Language/WebServer/TimeHandler.go
+	
+What is the difference between mux.Handlefunc and mux.Handle?
+	-> Both have same functions : They register the handler function for a given pattern
+	-> But, in mux.Handle, the handler function is of type "http.Handler" and in mux.Handlefunc, it is of type func(http.ResponseWrite, *http.Request)
+	
+	
+	##########################################################################################################################
+	
+Todd McLeod
+-----------
+Basically what does templates do?
+	-> Templates first parse a template [like html] and holds it
+	-> It uses arseGlob, ParseFiles, Parse to parse the templates
+	
+	-> When you execute that template with some data, then the data is applied to the template parsed
+	
+Templates:
+	-> Imagine it as a container that parses and holds your template(html) file data
+	
+template.ParseFiles(); takes 0 or more string as an argument
+	-> returns a pointer to a template and an error
+	-> 
+	
+template.ExecuteTemplate
+	-> If I have more than one *template.Template, then we can use this "ExecuteTemplate" function to execute a particular template
+	
+template.ParseGlob
+	-> If you want to parse all the files in a particular folder, we can use ParseGlob
+	
+template.Must
+	-> Parse every template only once
+	-> template.Must take template.ParseGlob as an argument
+	-> It is because that template.Must take a "*template.Template" and an error as an argument which template.ParseGlob returns
+	
+								or
+								
+	-> var t = template.Must(template.New("name").Parse("text"))
+	
+	For all the parse related definitions, refer the link "https://golang.org/pkg/text/template/#Template.Execute"
+	
+How to store a value in a variable in html template?
+	    {{$myAge := .}}
+	    <h1> Hariprathap is {{$myAge}} years old </h1>
+	    
+What is the difference between template.Parse() and template.Parsefiles?
+	-> Parse takes "Parse parses text as a template body for t."	  
+	
+	-> ParseFiles : ParseFiles parses the named files and associates the resulting templates with t
+	
+	################################################################################################################
+	
+Function Templates
+------------------
+	-> Funcs adds the elements of the argument map to the template's function map. It must be called before the template is parsed
+	
+Pre-Defined default values in templates
+---------------------------------------
+	-> To range over a slice of value : {{index . 0}} -> index is the keyword and "0" is the index position
+	-> If condition in template : {{if .Name}} -> "Name" here is the Keyword
+	
+	-> How to use "and" between two keywords "k1 and k2"?
+		->{{if and .k1 and .k2 }}
+		
+	-> comparison operations
+		-> {{ if gt/lt/eq .score1 .score2}}
+		
+	-> How to add comments in your template?
+		-> {{ /* ... comments ... */}}
+	
+	################################################################################################################
+	
+How to range over a slice of struct in template(gohtml) file in goLang?
+	-> Refer : /home/hari/go/src/WebDevelopmentTodd/Templates/templateHTMLStructOutput.go /**** Referral ****/
+	
+	-> Refer "/home/hari/go/src/WebDevelopmentTodd/Templates/tpl1.gohtml" /**** Referral ****/
+	
+	-> How to use nested templates?
+		Refer 
+	
+	################################################################################################################
+	
+http Response:
+--------------
+	-> How to get a particular value from a http response?
+		-> fmt.Println(resp.Header.Get("Content-Type"))
+		
+	################################################################################################################
+	
+Section 32 by Todd Wed Dev:
+---------------------------
+	-> https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/04.1.html
+	
+Section 33:
+-----------
+	-> Form and Post Form difference @ https://golang.org/pkg/net/http/; highlighted in cyan
+	
+Options Trading
+---------------
+	-> html and css linking references:
+		-> https://www.alexedwards.net/blog/serving-static-sites-with-go
+		-> https://stackoverflow.com/questions/43601359/how-do-i-serve-css-and-js-in-go
+		
+Section 36: Routing
+-------------------
+	-> Difference between mux.Handle and http.Handle, mux.HandleFunc and http.HandleFunc is explained well in the video "understanding ServeMux"
+	-> know what is and how http.Handlerfunc works
+	
+Section 41: Exercises
+---------------------
+	########	-> The exercises here are very good and important and have to practised often	########
+	
+hhtp and http.post:
+-------------------
+	-> https://blog.logrocket.com/making-http-requests-in-go/
+	
+What is the difference between json.Marshal and json.NewDecoder?
+	-> 
+	
+Section 46:
+-----------
+	-> Know the difference between static and dynamic webserver
+	
+Section 57:
+-----------
+	-> What has to be the form type to upload a file? enctype="multipart/form-data"
+	-> Other types : "text/plain" and "application/x-www-form-urlencoded"
+	
+Section 62:
+-----------
+	-> Cookies
+	
+Section 67:
+-----------
+	-> unique id : get the github package for the same using "go get github.com/satori/go.uuid"
+	-> To create a new ID: uuid.NewV4()
+	
+Section 75, 76, 77:
+-------------------
+	-> Refer the text below for accessing AWWS
+	Go inside the folder where you code is present 
+	Deploying the code on AWS
+	1. GOOS=linux GOARCH=amd64 go build -o mybinary 
+	2. Copy your binary to AWS
+		-> scp -i ~/.ssh/deadpoet_golang.pem mybinary ubuntu@ec2-13-127-168-52.ap-south-1.compute.amazonaws.com:
+			1. mybinary is my local binary (object file)
+			2. ubuntu is my EC2's OS
+			3. OS name followed by public DNS IP of the EC2s
+			
+	3. Then ssh into the EC2 server
+		-> ssh -i ~/.ssh/deadpoet_golang.pem ubuntu@ec2-13-127-168-52.ap-south-1.compute.amazonaws.com
+		
+	
+Section 78:
+-----------
+	1. know more about systemd in linux	
+	
+Section 104:
+------------
+	Context : by Sameer -> https://blog.golang.org/context
+		by Ardan -> https://www.ardanlabs.com/blog/2019/09/context-package-semantics-in-go.html
+		by rakyll -> https://rakyll.org/leakingctx/
+		
+Section 103:
+------------
+	Try out cookies, local storage and session storage
+	
+Section 105:
+------------
+	HTTPS and TLS : Explain SSL TLS in 7 minutes youtube
+	Let's Encrypt
+	
+	################################################################################################################
+		
+		
+	
+http Request:
+-------------
+How to create a new client?
+	-> client, client := &http.Client{ CheckRedirect: redirectPolicyFunc, }
+	
+How to fetch info from an url using that client?
+	-> resp, err := client.Get("http://example.com")
+	
+How to create a new request?
+	-> req, err := http.NewRequest("GET", "http://example.com", nil)
+	
+How to modify the request created?
+	-> req.Header.Add("If-None-Match", `W/"wyzzy"`)
+	-> resp, err := client.Do(req)	
+	
+
