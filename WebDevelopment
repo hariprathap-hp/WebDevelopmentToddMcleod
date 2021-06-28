@@ -299,6 +299,9 @@ MongoDB insert a user:
 	
 	-> To retrieve the use :
 		-> curl http://localhost:8000/user/60d95350c4ad8e6c9d28d97b
+		
+	-> To delete:
+		-> curl -X DELETE http://localhost:8000/user/60d95350c4ad8e6c9d28d97b
 
 MongoDB TroubleShooting page
 -----------------------------
@@ -332,4 +335,29 @@ MongoDB commands:
 			########## keyword and is used ###############
 	
 	################################################################################################################
+DOCKER	
+How to install docker: Followed .deb installation of community edition
+	-> https://trendoceans.com/how-to-get-install-docker-on-ubuntu-20-04-lts/ ####successful installation using docker.io###
+	-> Docker .deb packages location
+		-> https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/
+		
+	-> Installation using repository method
+		-> https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+		
+Start, Enable and status of Docker
+	$ sudo systemctl start docker
+	$ sudo systemctl enable docker
+	$ sudo systemctl status docker
 	
+Command to check docker process: sudo docker ps -a //It is to check the history of all the images in docker
+Docker Version : docker version
+
+Running images from Docker Hub
+-------------------------------
+	-> sudo docker run docker/whalesay horseay neigh
+		[docker is username and whalesay is image name]
+		
+To check the downloaded images, 
+	-> docker images
+		
+	################################################################################################################	
