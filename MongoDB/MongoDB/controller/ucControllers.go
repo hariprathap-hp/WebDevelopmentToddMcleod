@@ -91,16 +91,18 @@ func (uc uc_controllers) CreateUser(w http.ResponseWriter, r *http.Request, p ht
 
 func (uc uc_controllers) DeleteUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	//The function is to delete the user
-
+	fmt.Println("To delete a user")
 	//First check if the object to be deleted is in hex or not
 	id := p.ByName("id")
+	fmt.Println(id)
 	if !bson.IsObjectIdHex(id) {
 		w.WriteHeader(404)
 		return
 	}
 
 	oid := bson.ObjectIdHex(id)
-	if err := uc.session.DB("go-web-dev-db").C("users").Remove(oid); err != nil {
+	fmt.Println(oid)
+	if err := uc.session.DB("go-web-dev-db").C("users").RemoveId(oid); err != nil {
 		w.WriteHeader(404)
 		return
 	}
