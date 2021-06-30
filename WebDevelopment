@@ -332,7 +332,44 @@ MongoDB commands:
 		
 	7. Query a colletion based on both name and id,
 		* db.users.find({$and:[{"id":ObjectId("60d95516c4ad8e77a4966d6e")}, {"name":"James Bond"}]})
-			########## keyword and is used ###############
+			########## keyword $and is used, you can also use $or keyword ###############
+			
+	8. If we want to query for a number(for example age) less than 20,
+		* {age:{$lt:20}}
+			
+Collections:
+------------
+	1. Create collections
+		-> Implicit : db.<coll_name>.insert({<data>})
+		-> Explicit : db.createCollection(<coll name>)
+		-> Explicit : db.createCollection(<coll name>, {capped:true, size:65536, max: 1000000})
+		
+	2. Inserting a single document
+		-> db.<coll name>.insert({document})
+		
+	3. Inserting multiple documents
+		-> db.<coll name>.insert(<[{document1},{document2}, ... {documentn}]>)
+		
+Querying MongoDB:
+-----------------
+	1. We can use regex to query a collection
+	
+Update Query in MongoDB:
+------------------------
+	1. db.<coll name>.update()
+	
+Save a collection:
+-------------------
+	1. db.collection.save()
+	
+Projection in MongoDB:
+----------------------
+	1. Get only a section of data from the collection
+	2. Using "0" and "1" for columns; 0 means not present and "1" means present
+	
+Using "limit" to the number of output records
+
+Sort : using "1" for ascending and "-1" for descending	 
 	
 	################################################################################################################
 DOCKER	
