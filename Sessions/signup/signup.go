@@ -37,7 +37,7 @@ func main() {
 	http.HandleFunc("/bar", bar)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
-	log.Fatalln(http.ListenAndServe(":8000", nil))
+	log.Fatalln(http.ListenAndServe(":80", nil))
 }
 
 func index(w http.ResponseWriter, r *http.Request) {

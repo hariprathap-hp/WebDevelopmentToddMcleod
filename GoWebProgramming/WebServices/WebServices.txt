@@ -1,0 +1,4 @@
+The two most popular types are REST -based and SOAP -based. 
+	-> SOAP -based web services are mostly being used in enterprise systems
+	-> REST -based web services are more popular in publicly available web services
+	

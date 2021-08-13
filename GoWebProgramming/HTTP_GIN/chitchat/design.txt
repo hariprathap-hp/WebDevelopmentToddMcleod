@@ -1,0 +1,28 @@
+ChitChat
+data model:
+----------------
+	Users
+	Thread
+	
+Features :
+Users
+	- signup
+		-> Name
+		-> email
+		-> password
+	- login
+		-> email
+		->password
+		
+Thread
+		-> Id - Unique ID
+		-> Title
+		-> Read
+		-> Write
+		
+Posts
+		-> Id
+		-> Title
+		-> Read
+		-> Write
+	

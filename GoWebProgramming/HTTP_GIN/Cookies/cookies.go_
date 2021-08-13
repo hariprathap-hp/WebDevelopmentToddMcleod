@@ -1,0 +1,47 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+var n_gin *gin.Engine
+
+func main() {
+	n_gin = getGin()
+	n_gin.GET("/setcookie", SetCookie)
+	n_gin.GET("/getcookie", GetCookie)
+	n_gin.Run(":8000")
+}
+
+func getGin() *gin.Engine {
+	g := gin.Default()
+	return g
+}
+
+func SetCookie(ctx *gin.Context) {
+	c1 := http.Cookie{
+		Name:     "Cookie1",
+		Value:    "Go Web Programming Cookie",
+		HttpOnly: true,
+	}
+
+	c2 := http.Cookie{
+		Name:     "Cookie2",
+		Value:    "Go Web Programming Cookie",
+		HttpOnly: true,
+	}
+	http.SetCookie(ctx.Writer, &c1)
+	http.SetCookie(ctx.Writer, &c2)
+
+}
+func GetCookie(ctx *gin.Context) {
+	c2, _ := ctx.Request.Cookie("Cookie1")
+	fmt.Println(c2)
+	c3 := ctx.Request.Cookies()
+	fmt.Println(c3)
+	c1, _ := ctx.Cookie("Cookie1")
+	fmt.Println(c1)
+}

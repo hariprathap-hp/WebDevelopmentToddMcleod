@@ -1,0 +1,16 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
+
+func main() {
+	http.HandleFunc("/req/", ReqHandler)
+	log.Fatalln(http.ListenAndServe(":8000", nil))
+}
+
+func ReqHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello World, %s!", r.URL.Path[1:])
+}

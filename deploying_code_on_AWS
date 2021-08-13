@@ -1,0 +1,13 @@
+Go inside the folder where you code is present 
+Deploying the code on AWS
+	1. GOOS=linux GOARCH=amd64 go build -o mybinary 
+	2. Copy your binary to AWS
+		-> scp -i ~/.ssh/deadpoet_golang.pem mybinary ubuntu@ec2-3-108-190-136.ap-south-1.compute.amazonaws.com:
+			1. mybinary is my local binary (object file)
+			2. ubuntu is my EC2's OS
+			3. OS name followed by public DNS IP of the EC2s
+			
+	3. Then ssh into the EC2 server
+		-> ssh -i ~/.ssh/deadpoet_golang.pem ubuntu@ec2-3-108-190-136.ap-south-1.compute.amazonaws.com
+		
+	

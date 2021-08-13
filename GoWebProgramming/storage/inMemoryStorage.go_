@@ -1,0 +1,61 @@
+package main
+
+import "fmt"
+
+//create a struct to store data
+	type Post struct {
+		id     int
+		title  string
+		author string
+	}
+
+//create maps to store the data
+var postbyID = make(map[int]*Post)
+var postbyAuthor = make(map[string][]*Post)
+
+func storebyID(p Post) {
+	postbyID[p.id] = &p
+}
+
+func storebyAuthor(p Post) {
+	postbyAuthor[p.author] = append(postbyAuthor[p.author], &p)
+}
+
+func getByID(id int) *Post {
+	return postbyID[id]
+}
+
+func getByAuthor(auth string) []*Post {
+	return postbyAuthor[auth]
+}
+
+func main() {
+	//create posts
+	p1 := Post{1, "Harry Potter", "J.K Rowling"}
+	p2 := Post{2, "Game of Thrones", "George R.R Martin"}
+	p3 := Post{3, "Lord of the Rings", "JJ Tolkien"}
+	p4 := Post{4, "Winds of Winter", "George R.R Martin"}
+	p5 := Post{5, "Fantastic Beasts and Where to Find Them", "J.K Rowling"}
+
+	storebyID(p1)
+	storebyID(p2)
+	storebyID(p3)
+	storebyID(p4)
+	storebyID(p5)
+
+	storebyAuthor(p1)
+	storebyAuthor(p2)
+	storebyAuthor(p3)
+	storebyAuthor(p4)
+	storebyAuthor(p5)
+
+	for _, v := range postbyID {
+		fmt.Println(*v)
+	}
+
+	george := getByAuthor("George R.R Martin")
+	fmt.Println("Listing George R.R Martin's book")
+	for _, v := range george {
+		fmt.Println(*v)
+	}
+}

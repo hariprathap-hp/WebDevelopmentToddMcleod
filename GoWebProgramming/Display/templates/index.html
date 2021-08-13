@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html charset="utf-8">
+{{ template "layout" }}
+<body>
+    {{ . }}
+    <br>
+    <p1> Pipelines square is </p1>
+    {{ 5 | square | squareroot }}
+    <br>
+    {{ getslice | sum }}
+</body>
+</html>

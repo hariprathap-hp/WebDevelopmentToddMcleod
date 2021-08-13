@@ -22,6 +22,7 @@ func main() {
 func getSession() *mgo.Session {
 	s, err := mgo.Dial("mongodb://localhost")
 	if err != nil {
+		fmt.Println("Mongo Errors")
 		fmt.Println(err)
 	}
 	return s

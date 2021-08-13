@@ -1,0 +1,29 @@
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+	router := gin.Default()
+	//router.Static("/static", "/home/hari/go/src/GIN/")
+	//router.StaticFS("/GIN/", http.Dir("/home/hari/go/src/GIN"))
+	router.StaticFile("/route", "./test/test1")
+
+	req, _ := http.NewRequest("GET", "/route", nil)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+	b, _ := ioutil.ReadAll(rec.Body)
+	if string(b) == "All that glitters are not Gold" {
+		fmt.Println("true")
+	} else {
+		fmt.Println("false")
+	}
+
+	router.Run(":4002")
+}
