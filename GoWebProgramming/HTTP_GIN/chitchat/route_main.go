@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GoWebProgramming/HTTP_GIN/chitchat/data"
+	"WebDevelopmentTodd/GoWebProgramming/HTTP_GIN/chitchat/data"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +13,11 @@ func index(ctx *gin.Context) {
 	if err != nil {
 		error_message(ctx.Writer, ctx.Request, "Cannot get threads")
 	} else {
-		generateHTML(ctx, threads, "layout", "public.navbar", "index")
+		_, err := session(ctx.Writer, ctx.Request)
+		if err != nil {
+			generateHTML(ctx, threads, "layout", "public.navbar", "index")
+		} else {
+			generateHTML(ctx, threads, "layout", "private.navbar", "index")
+		}
 	}
 }

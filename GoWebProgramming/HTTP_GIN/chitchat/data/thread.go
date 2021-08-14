@@ -1,6 +1,8 @@
 package data
 
-import "time"
+import (
+	"time"
+)
 
 type Thread struct {
 	Id        int
@@ -36,4 +38,8 @@ func Threads() (threads []Thread, err error) {
 	}
 	rows.Close()
 	return
+}
+
+func (thread *Thread) Create() {
+	
 }
