@@ -27,7 +27,7 @@ func generateHTML(ctx *gin.Context, data interface{}, filenames ...string) {
 
 	fmt.Println(files)
 	n_gin.LoadHTMLFiles(files...)
-	fmt.Println(data)
+	fmt.Println("Data is --", data)
 	ctx.HTML(200, "layout", data)
 }
 

@@ -23,10 +23,6 @@ func iniializeRoutes() {
 func newThreadGroup(rg *gin.RouterGroup) {
 	rg.GET("/new", newThread)
 	rg.POST("/create", createThread)
-	rg.GET("/post", post)
+	rg.POST("/post", post)
 	rg.GET("/read", read)
-}
-
-func err(ctx *gin.Context) {
-
 }

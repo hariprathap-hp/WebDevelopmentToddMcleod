@@ -1,0 +1,6 @@
+SOAP based webservices
+	-> SOAP is a protocol for exchanging structured data that’s defined in XML
+	
+REST:
+	-> Representational State Transfer
+	

@@ -1,0 +1,61 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
+)
+
+type Practice struct {
+	ID      int    `json:"id"`
+	Content string `json:"content"`
+	Author  struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"author"`
+	Comments []struct {
+		ID      int    `json:"id"`
+		Content string `json:"content"`
+		Author  string `json:"author"`
+	} `json:"comments"`
+}
+
+func main() {
+	exam := Practice{}
+	jfile, err := os.Open("test.json")
+	if err != nil {
+		fmt.Errorf("json file opening failed with error %s\n", err)
+		return
+	}
+	defer jfile.Close()
+	bytes, _ := ioutil.ReadAll(jfile)
+	json.Unmarshal(bytes, &exam)
+	for _, v := range exam.Comments {
+		fmt.Println(v.ID, v.Content, v.Author)
+	}
+
+	method2()
+}
+
+func method2() {
+	jfile, err := os.Open("test.json")
+	if err != nil {
+		fmt.Errorf("json file opening failed with error %s\n", err)
+		return
+	}
+	decoder := json.NewDecoder(jfile)
+	for {
+		examp := Practice{}
+		err := decoder.Decode(&examp)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Println("Error decoding JSON:", err)
+			return
+		}
+		fmt.Println(examp)
+	}
+}
