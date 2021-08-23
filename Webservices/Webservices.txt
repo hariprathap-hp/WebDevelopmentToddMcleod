@@ -1,6 +1,62 @@
+Microservices link:
+	-> https://blog.softwaremill.com/what-are-microservices-and-what-are-their-benefits-d2aa64c52426
+	
+How I built Microservices in Go in 30 minutes, Check out this video for CGO : GO integration with C
+	-> https://www.youtube.com/watch?v=bM6N-vgPlyQ
+	
+APIs vs Microservices:
+	-> https://blog.hubspot.com/website/microservices-vs-api
+	-> https://www.google.com/url?sa=i&url=https%3A%2F%2Fblog.hubspot.com%2Fwebsite%2Fmicroservices-vs-api&psig=AOvVaw1ZAjcRXDSgHpsXr2qtA_iY&ust=1629268518789000&source=images&cd=vfe&ved=0CAwQjhxqFwoTCIiyyKy4t_ICFQAAAAAdAAAAABAD
+
 SOAP based webservices
 	-> SOAP is a protocol for exchanging structured data that’s defined in XML
 	
 REST:
 	-> Representational State Transfer
+	-> REST, which stands for Representational State Transfer, is a framework for developing APIs
 	
+	-> Also refer the APIs vs Microservices link to know more about REST APIs
+	
+APIs:
+	-> In microservices approach every piece of software is small enough to focus on a single purpose and big enough to add value as a component. All software components are responsible for different, but well-encapsulated domain areas, and they communicate with each-other using an API
+	
+What is a Web-API?
+	-> Web APIs facilitate communication between web servers
+	-> A Web-API is an external API 
+	
+Internal APIs:
+	-> Internal APIs are used for communication within an application, and access is usually restricted to the organization’s employees and authorized developers
+
+Section 3; Testig in Go
+	-> Types : Unit,Integeration and Function
+	
+	->Go doesn't have assertions 
+		-> Why? For example, if there are 2-3 conditions that needed to be asseted mandatorily and using assert statement will exit if the first condition fails
+		-> But, using go Tests, even if the first condition fails, we can proceed to check if the remaining conditions succeed or not
+		
+	-> Can we use assertion in Go?
+		-> Yes, using assert package from strectchr
+				-> assert package helps proceed with asserion even when the first assertion fails
+				
+	-> How to run test coverage?
+		-> go test -cover
+		
+				***************************************************************************************************************************************************************************************
+				
+Section 4 : Consuming external APIs
+Episode 11
+		-> 
+				
+Episode 13
+		-> Domains are important part of microservices
+		
+Episode 14:
+		-> REST clients are native HTTP clients
+		
+				***************************************************************************************************************************************************************************************
+Questions:
+	-> Difference between REST and RESTFul
+			-> https://stackoverflow.com/questions/1568834/whats-the-difference-between-rest-restful
+		
+Frequent numbness on my left side
+

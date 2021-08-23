@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"WebDevelopmentTodd/Webservices/REST_MS_GO/golang-microservices/services"
+	services "WebDevelopmentTodd/Webservices/REST_MS_GO/golang-microservices/services_"
 	"WebDevelopmentTodd/Webservices/REST_MS_GO/golang-microservices/utils"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -20,19 +19,16 @@ func GetUser(ctx *gin.Context) {
 		apiError := &utils.ApplicationError{
 			Message:    "User Id must be a Number",
 			StatusCode: http.StatusBadRequest,
-			Code:       "bad_rquest",
+			Code:       "bad_request",
 		}
-		jsonValue, _ := json.MarshalIndent(apiError, "", "\t")
-		ctx.Writer.WriteHeader(apiError.StatusCode)
-		ctx.Writer.Write(jsonValue)
+
+		utils.RespondError(ctx, apiError)
 		return
 	}
 	user, apiError := services.GetUser(userId)
 	if apiError != nil {
-		jsonValue, _ := json.MarshalIndent(apiError, "", "\t")
-		ctx.Writer.WriteHeader(apiError.StatusCode)
-		ctx.Writer.Write(jsonValue)
+		utils.RespondError(ctx, apiError)
+		return
 	}
-	jsonValue, _ := json.MarshalIndent(user, "", "\t")
-	ctx.Writer.Write(jsonValue)
+	utils.Respond(ctx, http.StatusOK, user)
 }
