@@ -9,7 +9,8 @@ import (
 
 func mapUrls() {
 	n_gin.GET("/", index)
-	n_gin.POST("/repositories", repositories_controller.CreateRepo)
+	n_gin.POST("/repository", repositories_controller.CreateRepo)
+	n_gin.POST("/repositories", repositories_controller.CreateRepos)
 }
 
 func index(c *gin.Context) {

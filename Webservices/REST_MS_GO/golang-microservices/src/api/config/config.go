@@ -11,5 +11,5 @@ var (
 )
 
 func GetGithubAccessToken() string {
-	return githubAccessToken
+	return "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"
 }
