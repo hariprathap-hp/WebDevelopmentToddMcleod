@@ -9,14 +9,10 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 )
 
 var url = "https://www.nseindia.com/api/option-chain-indices?symbol=BANKNIFTY"
 
-//var url = "https://www.espncricinfo.com/"
-
-//var url = "https://nseoptions.s3.ap-south-1.amazonaws.com/data1.json"
 var tmpl *template.Template
 var parse_err error
 var expiry_Date = "01-Jul-2021"
@@ -39,40 +35,6 @@ func retStrike(a, b int) []int {
 
 func init() {
 	tmpl = template.Must(template.New("").Funcs(ft).ParseFiles("./css/niftyBank.gohtml"))
-}
-
-type Options struct {
-	Records struct {
-		Expirydates []string `json:"expiryDates"`
-		Data        []struct {
-			Strikeprice int    `json:"strikePrice"`
-			Expirydate  string `json:"expiryDate"`
-			Pe          struct {
-				Strikeprice           int     `json:"strikePrice"`
-				Expirydate            string  `json:"expiryDate"`
-				Openinterest          int     `json:"openInterest"`
-				Changeinopeninterest  int     `json:"changeinOpenInterest"`
-				Pchangeinopeninterest float64 `json:"pchangeinOpenInterest"`
-				Totaltradedvolume     int     `json:"totalTradedVolume"`
-				Impliedvolatility     float64 `json:"impliedVolatility"`
-				Lastprice             float64 `json:"lastPrice"`
-				Change                float64 `json:"change"`
-				Pchange               float64 `json:"pChange"`
-			} `json:"PE,omitempty"`
-			Ce struct {
-				Strikeprice           int     `json:"strikePrice"`
-				Expirydate            string  `json:"expiryDate"`
-				Openinterest          int     `json:"openInterest"`
-				Changeinopeninterest  int     `json:"changeinOpenInterest"`
-				Pchangeinopeninterest float64 `json:"pchangeinOpenInterest"`
-				Totaltradedvolume     int     `json:"totalTradedVolume"`
-				Impliedvolatility     float64 `json:"impliedVolatility"`
-				Lastprice             float64 `json:"lastPrice"`
-				Change                float64 `json:"change"`
-				Pchange               float64 `json:"pChange"`
-			} `json:"CE,omitempty"`
-		} `json:"data"`
-	} `json:"records"`
 }
 
 type roundTripperStripUserAgent struct{}
@@ -106,7 +68,6 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 
 	var option Options
 
-	fmt.Println("Result is -- ", string(result))
 	json.Unmarshal([]byte(result), &option)
 
 	//initialize the default variables for the range of strike prices
@@ -115,7 +76,7 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		r.ParseForm()
-		fmt.Println(r.Form)
+		//fmt.Println(r.Form)
 		if r.FormValue("expiry") != "" {
 			expiry_Date = r.FormValue("expiry")
 		}
@@ -139,17 +100,10 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 		strike2 = 37500
 	}
 
-	var toHtml = struct {
-		Expiry   string
-		Fstrike1 int
-		Fstrike2 int
-		Strike1  int
-		Strike2  int
-		BankInfo Options
-	}{
+	toHtml := ToHtml{
 		Expiry:   expiry_Date,
-		Fstrike1: 32000,
-		Fstrike2: 38000,
+		Fstrike1: 34000,
+		Fstrike2: 43000,
 		Strike1:  strike1,
 		Strike2:  strike2,
 		BankInfo: option,
@@ -158,9 +112,6 @@ func fetchURL(w http.ResponseWriter, r *http.Request) {
 	if parse_err != nil {
 		fmt.Printf("Error while parsing html template file %s", parse_err)
 	}
-	fmt.Println(time.Now())
-	fmt.Println("Value to HTML", toHtml)
-	fmt.Println(expiry_Date, strike1, strike2, "Before Template Execution")
 	tmpl.ExecuteTemplate(w, "niftyBank.gohtml", toHtml)
 }
 
